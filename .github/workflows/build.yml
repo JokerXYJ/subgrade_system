@@ -4,7 +4,7 @@ name: Windows Production Build
 on:
   push:
     branches:
-      - main  # 当您 push 代码到 main 分支时自动触发打包
+      - master  # 当您 push 代码到 main 分支时自动触发打包
 
 jobs:
   build:
