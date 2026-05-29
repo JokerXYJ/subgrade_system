@@ -9,7 +9,6 @@ OutputBaseFilename=SubgradeCompactionSystem_Setup
 Compression=lzma
 SolidCompression=yes
 DisableProgramGroupPage=yes
-AlwaysCreateUninstallIcon=yes
 
 [Files]
 Source: "dist\main\main.exe"; DestDir: "{app}"; Flags: ignoreversion
