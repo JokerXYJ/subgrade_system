@@ -12,10 +12,15 @@ if getattr(sys, 'frozen', False):
         sys.path.append(exe_dir)
 
 # 2. 强行显式引入大型物理和绘图依赖，防止被 PyInstaller 编译器裁剪过滤
-import numpy as np
-import scipy
-import matplotlib
-import matplotlib.pyplot
+# 显式导入核心物理与绘图依赖（强制 PyInstaller 将其完整打包进 EXE）
+# 同时增加 try-except 保护，确保您在本地测试时即使没有这些库也不会崩溃
+try:
+    import numpy as np
+    import scipy
+    import matplotlib
+    import matplotlib.pyplot
+except ImportError:
+    pass # 本地若缺失，则优雅忽略，防止本地测试运行报错
 
 # 3. 载入 PyQt6 核心组件
 from PyQt6.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout, 
