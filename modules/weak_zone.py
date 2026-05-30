@@ -15,7 +15,7 @@ except ImportError:
 
 # ================= 原生 2D 空间雷达散点画布 =================
 class NeonSpatialCanvas(QWidget):
-    """自研的高动态测点空间雷达，在缺失 matplotlib 时自动替换，渲染高科技感测点"""
+    # 自研的高动态测点空间雷达，在缺失 matplotlib 时自动替换，渲染高科技感测点
     def __init__(self, parent=None):
         super().__init__(parent)
         self.xs = []
@@ -57,8 +57,7 @@ class NeonSpatialCanvas(QWidget):
             px = (self.xs[i] - 10) / 80 * w
             py = (self.ys[i] - 5) / 40 * h
             
-            # 根据压实刚度 CMV 分配颜色
-            # 刚度 >= 75 (达标) 用绿色，刚度 < 75 用黄色/红色
+            # 根据压实度分级分配颜色
             stiffness = self.vals[i]
             if stiffness >= 75:
                 color = QColor("#10b981") # 绿
@@ -93,7 +92,7 @@ class WeakZoneWidget(QWidget):
         self.init_ui()
 
     def generate_simulated_points(self):
-        """模拟一个 80米 * 40米 连续施工路基上的 180 个高频采集测点数据"""
+        # 模拟一个 80米 * 40米 连续施工路基上的 180 个高频采集测点数据
         np.random.seed(99)
         self.xs = np.random.uniform(10, 90, 180)
         self.ys = np.random.uniform(5, 45, 180)
@@ -120,7 +119,7 @@ class WeakZoneWidget(QWidget):
         lbl_panel_title.setStyleSheet("color: #38bdf8; font-weight: bold; font-size: 13px;")
         left_layout.addWidget(lbl_panel_title)
 
-        self.lbl_alert_count = QLabel("高风险测点数: 待运算")
+        self.lbl_alert_count = QLabel("高风险预警点数量: 待运算")
         self.lbl_alert_count.setStyleSheet("color: #fb7185; font-size: 12px; font-weight: bold;")
         left_layout.addWidget(self.lbl_alert_count)
         left_layout.addSpacing(15)
@@ -137,7 +136,7 @@ class WeakZoneWidget(QWidget):
         left_layout.addWidget(self.sld_radius)
 
         # Z-score 离群强度设定 (交互滑块)
-        self.lbl_z = QLabel(f"Z-score 离偏硬度指标: {self.z_threshold:.1f}")
+        self.lbl_z = QLabel(f"Z-score 离偏度指标: {self.z_threshold:.1f}")
         self.lbl_z.setStyleSheet("color: #94a3b8; font-size: 11px;")
         left_layout.addWidget(self.lbl_z)
 
@@ -160,7 +159,7 @@ class WeakZoneWidget(QWidget):
         
         left_layout.addSpacing(15)
 
-        # 故障区列表输出（可删除/标记）
+        # 故障区列表输出
         self.tbl_anom = QTableWidget(0, 3)
         self.tbl_anom.setHorizontalHeaderLabels(["桩号 X", "偏幅 Y", "CMV 刚度"])
         self.tbl_anom.setStyleSheet("""
@@ -190,7 +189,8 @@ class WeakZoneWidget(QWidget):
             self.neon_canvas = NeonSpatialCanvas()
             self.right_layout.addWidget(self.neon_canvas)
 
-        layout.addWidget(self.right_panel, stretch=2.2)
+        # 修正参数：将小数 2.2 替换为整数 2，完美解决 C++ 类型校验报错
+        layout.addWidget(self.right_panel, stretch=2)
         
         # 启动时执行初次解算
         self.perform_spatial_clustering()
